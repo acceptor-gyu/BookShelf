@@ -1,5 +1,8 @@
 # 오브젝트 - chapter number <chapter title>
 
+## 제목을 보고 든 생각
+
+
 ## 목차
 1. index
 2. index
