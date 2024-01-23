@@ -107,6 +107,24 @@ db.posts.find({
 
 > 두 쿼리 모두 여러 개의 속성을 임의로 조합하여 질의할 수 있는 능력을 보여 주고 있는데, 이러한 것이 애드혹 쿼리의 본질적인 강점이다.
 
+### 인덱스
+MongoDB에서 인덱스는 `B-트리(B-tree)`로 구현되어 있다.  
+`WiredTiger`는 `LSM(Log-Structured Merge Tree)` 인덱스를 지원하며, MongoDB 3.2 정식 배포판부터 이용할 수 있다.
+
+MongoDB에서도 프라이머리 키는 자동적으로 인덱스되어 각 기준은 유니크 키(unique key)를 이용하여 효과적으로 기억된다.  
+하지만 모든 데이터베이스가 행 또는 도큐먼트에 대한 인덱스 작업을 허용하는 것은 아니다.
+이들은 `세컨더리 인덱스(secondardy index)`라고 불린다. HBase와 같은 많은 NoSQL 데이터베이스는 `키-값 저장소(key-value store)`로 간주되는데,
+이는 그 어떤 세컨더리 인덱스도 지원하지 않는다.  
+이는 MongoDB에서 매우 중요한 특징인데, 여러 개의 세컨더리 인덱스를 허용함으로써 MongoDB는 사용자가 넓은 범위의 쿼리를 최적화하도록 허용한다.
+
+MongoDB에서는 한 컬렉션에 64개까지 세컨더리 인덱스까지 만들 수 있다.
+오름차순, 내림차순, 고유(unique), 복합 키(compound-key), 해시, 텍스트, 지리공간적 인덱스와 같이 관계 데이터베이스 시스템에서 볼 수 있는 모든 인덱스가 가능하다.
+
+> 지리공간적 인덱스는 효과적으로 위도와 경도를 질의할 수 있도록 해준다.
+
+> MongoDB v3.6
+> - WiredTiger 엔진은 v3.0부터 도입되었으며, v3.0에서는 MMAPv1이 디폴트 엔진이다. 단, v3.0에서는 WiredTiger 엔진을 사용할 수 있도록 설정할 수 있다.
+> - v3.2부터는 WiredTiger 엔진이 디폴트 엔진이다.
 
 ## 1.3 MongoDB 코어 서버와 툴
 
@@ -148,3 +166,12 @@ db.posts.find({
 ## detail
 > 도큐먼트 데이터베이스란?
 >   - 도큐먼트 데이터베이스는 관계형 데이터베이스와 달리 스키마가 없다.
+
+> 개체-속성-값 패턴
+>   - http://en.wikipeda.org/wiki/Entity-attribute-value_model
+
+> WiredTiger
+ 
+> LSM(Log-Structured Merge Tree)
+
+> 세컨더리 인덱스(secondardy index)
