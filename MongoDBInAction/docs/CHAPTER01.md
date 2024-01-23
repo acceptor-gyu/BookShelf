@@ -14,7 +14,7 @@
 
 개발자들은 확장성보다는 직관적인 데이터 모델때문에 MongoDB를 선호할 것이다.
 
-```ruby
+```mongodb-json
 {
   _id: 10,
   username: 'acceptor-gyu',
@@ -24,7 +24,7 @@
 위 도큐먼트와 같은 모델의 장점은 무엇일까?
 
 관계 모델에서 테이블을 나누고 조인을 해야하겠지만, MongoDB는 다른 방법을 제공한다.
-```ruby
+```mongodb-json
 {
   _id: 10,
   username: 'acceptor-gyu',
@@ -81,6 +81,31 @@ MongoDB는 도큐먼트를 컬렉션으로 모아 놓는데, 어떤 종류의 �
 2. 스키마가 없는 데이터 모델을 통해 가변적인 속성을 갖는 데이터를 표현할 수 있다는 것이다.
    - 조인이 필요 없고, 새로운 속성은 한 도큐먼트에 동적으로 추가할 수 있다.
    - 애플리케이션 개발을 할 때 추후에 필요한 데이터 필드가 무엇인지에 대해서는 걱정할 필요가 없다.
+
+### 애드혹 쿼리
+시스템이 `애드혹 쿼리(ad hoc query)`를 지원한다고 하는 것은 시스템이 받아들일 수 있는 질의를 미리 정의할 필요가 없다는 것이다.  
+RDBMS가 이 기능을 제공하는데, 질의가 어떠한 조건을 갖더라도 올바른 구조이기만 하면 SQL 쿼리가 실행된다. (모든 데이터베이스가 동적 질의를 지원하는 것은 아니다.)  
+다른 많은 시스템에서와 같이 키-값 저장 시스템 역시 간단하고 확장성 높은 모델을 위해 풍부한 쿼리 기능을 포기한다.
+
+> MongoDB의 설계 목표 중 하나는 관계형 데이터베이스 상에서 필수적인 쿼리 언어 성능을 대부분 유지하는 것이다.
+
+MongoDB에서 쿼리 언어가 어떻게 작동하는지 보기 위해 예를 들어보자.
+- 추천 수가 10 이상의 'politics'라는 용어로 태그된 포스트를 찾으려면 SQL 쿼리 언어는 다음과 같다.
+```sql
+SELECT * FROM posts 
+         INNER JOIN posts_tags ON posts.id = posts_tage.post_id
+         INNER JOIN tags ON posts_tags.tag_id == tags.id
+         WHERE tags.text = 'politics' AND posts.vote_count > 10
+```
+- MongoDB에서는 다음과 같다.
+```ruby
+db.posts.find({
+  tags: 'politics',
+  vote_count: { $gt: 10 }
+});
+```
+
+> 두 쿼리 모두 여러 개의 속성을 임의로 조합하여 질의할 수 있는 능력을 보여 주고 있는데, 이러한 것이 애드혹 쿼리의 본질적인 강점이다.
 
 
 ## 1.3 MongoDB 코어 서버와 툴
